@@ -5,25 +5,21 @@
         <p class="title">Register</p>
         <form method="POST" action="{{ route('register') }}" class="form">
             @csrf
-            <!-- Name -->
             <div class="input-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus placeholder="Enter your full name">
             </div>
 
-            <!-- Email -->
             <div class="input-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" value="{{ old('email') }}" required placeholder="Enter your email">
             </div>
 
-            <!-- Password -->
             <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required autocomplete="new-password" placeholder="Enter your password">
             </div>
 
-            <!-- Confirm Password -->
             <div class="input-group">
                 <label for="password_confirmation">Confirm Password</label>
                 <input type="password" id="password_confirmation" name="password_confirmation" required autocomplete="new-password" placeholder="Confirm your password">
