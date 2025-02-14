@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editProductForm" class="form-inline" action="" method="post" enctype="multipart/form-data">
+                <form id="editProductForm" action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="mb-3 row">
@@ -52,14 +52,49 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <div class="form-group col-md-12">
-                            <label for="editProductImage">Product Image</label>
-                            <input type="file" class="form-control" id="editProductImage" name="image">
-                            <img id="editProductImagePreview" src="" alt="Product Image" width="150" style="display: none;">
+                        <div class="form-group col-md-6">
+                            <label for="editProductSalePrice">Sale Price</label>
+                            <input type="number" class="form-control" id="editProductSalePrice" name="discount_price" step="0.01">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="editProductStatus">Status</label>
+                            <select id="editProductStatus" class="form-control" name="status">
+                                <option value="available">Available</option>
+                                <option value="unavailable">Unavailable</option>
+                            </select>
                         </div>
                     </div>
-                    <input class="btn btn-primary" type="submit" value="Update Product">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <div class="mb-3 row">
+                        <div class="form-group col-md-6">
+                            <label for="editProductSlug">Slug</label>
+                            <input type="text" class="form-control" id="editProductSlug" name="slug">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="editProductWeight">Weight (kg)</label>
+                            <input type="number" class="form-control" id="editProductWeight" name="weight" step="0.01">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="form-group col-md-6">
+                            <label for="editProductDimensions">Dimensions (cm)</label>
+                            <input type="text" class="form-control" id="editProductDimensions" name="dimensions">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="editProductOnSale" name="on_sale" value="1">
+                                <label class="form-check-label" for="editProductOnSale">On Sale</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProductImage">Product Image</label>
+                        <input type="file" class="form-control" name="image" id="editProductImage">
+                        <img id="editProductImagePreview" class="img-fluid mt-2" style="display: none;" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -52,13 +52,49 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
+                        <div class="form-group col-md-6">
+                            <label for="createProductSalePrice">Sale Price</label>
+                            <input type="number" class="form-control" id="createProductSalePrice" name="discount_price" step="0.01">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="createProductStatus">Status</label>
+                            <select id="createProductStatus" class="form-control" name="status" required>
+                                <option selected disabled value="">Choose...</option>
+                                <option value="available">Available</option>
+                                <option value="unavailable">Unavailable</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="form-group col-md-6">
+                            <label for="createProductSlug">Slug</label>
+                            <input type="text" class="form-control" id="createProductSlug" name="slug" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="createProductWeight">Weight (kg)</label>
+                            <input type="number" class="form-control" id="createProductWeight" name="weight" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="form-group col-md-6">
+                            <label for="createProductDimensions">Dimensions (cm)</label>
+                            <input type="text" class="form-control" id="createProductDimensions" name="dimensions" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="createProductOnSale">On Sale</label>
+                            <input type="checkbox" class="form-check-input" id="createProductOnSale" name="on_sale">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
                         <div class="form-group col-md-12">
                             <label for="createProductImage">Product Image</label>
                             <input type="file" class="form-control" id="createProductImage" name="image" required>
                         </div>
                     </div>
-                    <input class="btn btn-primary" type="submit" value="Create Product">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Product</button>
+                    </div>
                 </form>
             </div>
         </div>

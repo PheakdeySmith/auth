@@ -10,14 +10,13 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-
         $search = $request->input('search');
 
-        $products = Product::when($search, function($query, $search) {
+        $products = Product::when($search, function ($query, $search) {
             return $query->where('product_name', 'like', "%{$search}%")
-                         ->orWhere('product_code', 'like', "%{$search}%");
+                ->orWhere('product_code', 'like', "%{$search}%");
         })
-        ->paginate(10);
+            ->paginate(10);
 
         return view('admin.products.index', compact('products'));
     }
@@ -29,25 +28,48 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'product_code' => 'required|unique:products',
-            'product_name' => 'required',
-            'price' => 'required|numeric',
-            'category_name' => 'required',
-            'stock_quantity' => 'required|integer',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        try {
+            $request->validate([
+                'product_code' => 'required|unique:products',
+                'product_name' => 'required',
+                'price' => 'required|numeric',
+                'category_name' => 'required',
+                'stock_quantity' => 'required|integer',
+                'description' => 'nullable|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'on_sale' => 'nullable|boolean',
+                'discount_price' => 'nullable|numeric',
+                'slug' => 'required|unique:products',
+                'weight' => 'nullable|numeric',
+                'dimensions' => 'nullable|string',
+                'status' => 'required|in:available,unavailable',
+            ]);
 
-        $productData = $request->only(['product_code', 'product_name', 'price', 'category_name', 'stock_quantity', 'description']);
+            $productData = $request->only([
+                'product_code',
+                'product_name',
+                'price',
+                'category_name',
+                'stock_quantity',
+                'description',
+                'on_sale',
+                'discount_price',
+                'slug',
+                'weight',
+                'dimensions',
+                'status'
+            ]);
 
-        if ($request->hasFile('image')) {
-            $productData['image'] = $request->file('image')->store('product_images', 'public');
+            if ($request->hasFile('image')) {
+                $productData['image'] = $request->file('image')->store('product_images', 'public');
+            }
+
+            Product::create($productData);
+
+            return redirect()->route('products.index')->with('success', 'Product created successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error creating product: ' . $e->getMessage());
         }
-
-        Product::create($productData);
-
-        return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }
 
     public function edit($id)
@@ -58,42 +80,90 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'product_code' => 'required|unique:products,product_code,' . $id,
-            'product_name' => 'required',
-            'price' => 'required|numeric',
-            'category_name' => 'required',
-            'stock_quantity' => 'required|integer',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        try {
+            $product = Product::findOrFail($id);
 
-        $product = Product::findOrFail($id);
+            $validatedData = $request->validate([
+                'product_name' => 'required|string|max:255',
+                'price' => 'required|numeric',
+                'category_name' => 'required|string',
+                'stock_quantity' => 'required|integer',
+                'description' => 'nullable|string',
+                'discount_price' => 'nullable|numeric',
+                'status' => 'nullable|string',
+                'slug' => 'required|string|unique:products,slug,' . $product->id,
+                'weight' => 'nullable|numeric',
+                'dimensions' => 'nullable|string',
+                'on_sale' => 'nullable|boolean',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        $productData = $request->only(['product_code', 'product_name', 'price', 'category_name', 'stock_quantity', 'description']);
+            $product->update($validatedData);
 
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            $productData['image'] = $request->file('image')->store('product_images', 'public');
+            return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error updating product: ' . $e->getMessage());
         }
-
-        $product->update($productData);
-
-        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
 
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
+        try {
+            $product = Product::findOrFail($id);
 
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+
+            $product->delete();
+
+            return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error deleting product: ' . $e->getMessage());
+        }
+    }
+
+
+    public function filterProducts(Request $request)
+    {
+        $query = Product::query();
+
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category_name', $request->category);
         }
 
-        $product->delete();
+        if ($request->has('price_min') && $request->price_min != '') {
+            $query->where('price', '>=', $request->price_min);
+        }
 
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
+        if ($request->has('price_max') && $request->price_max != '') {
+            $query->where('price', '<=', $request->price_max);
+        }
+
+        if ($request->has('stock_min') && $request->stock_min != '') {
+            $query->where('stock_quantity', '>=', $request->stock_min);
+        }
+
+        if ($request->has('stock_max') && $request->stock_max != '') {
+            $query->where('stock_quantity', '<=', $request->stock_max);
+        }
+
+        if ($request->has('on_sale') && $request->on_sale != '') {
+            $query->where('on_sale', $request->on_sale);
+        }
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('product_name', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->paginate(10);
+
+        return view('frontend.new_arrival.index', compact('products'));
     }
+
 }

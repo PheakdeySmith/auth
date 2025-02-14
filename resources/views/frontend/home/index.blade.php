@@ -1,17 +1,21 @@
 @extends('frontend.front_app')
 @section('content')
 
-    <!-- start populer-products -->
+    <!-- Carousel Section -->
+    <section id="carousel-section">
+        {{-- start carousel --}}
+        @include('frontend.partials.carousel')
+        {{-- end carousel --}}
+    </section>
+    <!-- Carousel Section End -->
+
+    {{-- <!-- start populer-products -->
     <section id="populer-products" class="populer-products">
         @include('frontend.partials.popular_product')
     </section>
-    <!-- end populer-products -->
+    <!-- end populer-products --> --}}
 
-    <!-- new-arrivals start -->
-    <section id="new-arrivals" class="new-arrivals">
-        @include('frontend.partials.new_arrival')
-    </section>
-    <!--new-arrivals end -->
+
 
     <!-- sofa-collection start -->
     <section id="sofa-collection">

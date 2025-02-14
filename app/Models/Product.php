@@ -13,9 +13,20 @@ class Product extends Model
         'product_code',
         'product_name',
         'price',
-        'category_name',  // Category name as a string
+        'category_name',
         'stock_quantity',
         'description',
         'image',
+        'discount_price',
+        'status',
+        'slug',
+        'weight',
+        'dimensions',
+        'on_sale',
     ];
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }
