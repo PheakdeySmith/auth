@@ -82,7 +82,7 @@
                         data-target="#navbar-menu">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <a class="navbar-brand" href="index.html"><span>eO</span>cambo.</a>
+                    <a class="navbar-brand" href="index.html"><span>eO</span>shop</a>
 
                 </div><!--/.navbar-header-->
                 <!-- End Header Navigation -->

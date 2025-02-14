@@ -13,7 +13,7 @@
         rel="stylesheet">
 
     <!-- title of site -->
-    <title>eOcambo</title>
+    <title>eOshop</title>
 
     <!-- For favicon png -->
     <link rel="shortcut icon" type="image/icon" href="{{ asset('front_assets') }}/logo/favicon.png" />
