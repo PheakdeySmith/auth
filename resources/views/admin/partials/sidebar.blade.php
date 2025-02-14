@@ -19,7 +19,6 @@
                 </a>
             </li>
             <li class="nav-item nav-category">Fields</li>
-            <!-- Manage Products Section -->
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#productPages" role="button" aria-expanded="false" aria-controls="productPages">
                     <i class="link-icon" data-feather="box"></i>

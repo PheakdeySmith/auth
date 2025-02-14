@@ -109,7 +109,6 @@
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Real-time search functionality
         const searchInput = document.getElementById('searchInput');
         const productTableBody = document.getElementById('productTableBody');
         const rows = productTableBody.getElementsByTagName('tr');
@@ -140,7 +139,6 @@
                 let description = this.getAttribute('data-description');
                 let image = this.getAttribute('data-image');
 
-                // Populate the Edit modal fields
                 document.getElementById('editProductCode').value = productCode;
                 document.getElementById('editProductName').value = productName;
                 document.getElementById('editProductPrice').value = price;
@@ -152,18 +150,15 @@
                     document.getElementById('editProductImagePreview').style.display = 'block';
                 }
 
-                // Set the form action
                 document.getElementById('editProductForm').action = '/products/' + id;
             });
         });
 
-        // Delete Button
         let deleteBtns = document.querySelectorAll('.delete-btn');
         deleteBtns.forEach(btn => {
             btn.addEventListener('click', function () {
                 let id = this.getAttribute('data-id');
 
-                // Set the form action for the delete modal
                 document.getElementById('deleteProductId').value = id;
                 document.getElementById('deleteProductForm').action = '/products/' + id;
             });

@@ -10,15 +10,14 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        // Get the search query from the request if it exists
+
         $search = $request->input('search');
 
-        // Query products with optional search functionality
         $products = Product::when($search, function($query, $search) {
             return $query->where('product_name', 'like', "%{$search}%")
                          ->orWhere('product_code', 'like', "%{$search}%");
         })
-        ->paginate(10); // Set pagination limit to 10
+        ->paginate(10);
 
         return view('admin.products.index', compact('products'));
     }
@@ -74,7 +73,6 @@ class ProductController extends Controller
         $productData = $request->only(['product_code', 'product_name', 'price', 'category_name', 'stock_quantity', 'description']);
 
         if ($request->hasFile('image')) {
-            // Delete old image
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
